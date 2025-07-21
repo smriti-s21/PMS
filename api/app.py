@@ -24,7 +24,11 @@ DATABASE_URL = os.environ.get('DATABASE_URL')
 
 if DATABASE_URL:
     # Use PostgreSQL in production
-    app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
+    # Handle Neon's SSL requirements
+    if 'neon.tech' in DATABASE_URL:
+        app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL + '?sslmode=require'
+    else:
+        app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
 else:
     # Use SQLite for local development
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///../instance/pms.db'
