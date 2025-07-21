@@ -26,7 +26,11 @@ if DATABASE_URL:
     # Use PostgreSQL in production
     # Handle Neon's SSL requirements
     if 'neon.tech' in DATABASE_URL:
-        app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL + '?sslmode=require'
+        # Don't add sslmode=require if it's already in the URL
+        if '?sslmode=require' not in DATABASE_URL:
+            app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL + '?sslmode=require'
+        else:
+            app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
     else:
         app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
 else:
