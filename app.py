@@ -42,7 +42,10 @@ def inject_now():
 # Import routes
 from routes import *
 
+# Create tables when app is initialized
+with app.app_context():
+    create_tables()
+
+# For local development
 if __name__ == '__main__':
-    with app.app_context():
-        create_tables()
     app.run(debug=True)
